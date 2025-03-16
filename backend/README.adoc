@@ -1,0 +1,19 @@
+= Backend for EB
+
+Written in Golang, separated into two modules:
+
+- `eb_logic` - contains everything about board, players, game logic etc.
+- `app` - REST API service allowing interaction with `eb_logic`, importing it to fulfill it's function.
+
+== Starting service
+
+[shell,terminal]
+====
+$ cd app && go run .
+====
+
+== API Endpoint
+
+The API service listens on port 3333 by default.
+
+You can access the API at `http://localhost:3333`.
