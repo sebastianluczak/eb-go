@@ -12,3 +12,17 @@ I really like this setup.
 Golang is like TS mixed with Rust. On the other hand, Rust feels like TS mixed with C++ for me.
 
 Really strange combination, I need to explore it further but time and space are bound to laws of physics. ;(
+
+
+== Presentation (why not)
+
+I've included presentation about this work using `reveal.js` which is awesome but I'd prefer to write it in Asciidoc.
+
+In root of project run:
+
+[shell,terminal]
+====
+npx reveal.js-online
+====
+
+This command starts HTTP server on port 8001 with a small presentation.
