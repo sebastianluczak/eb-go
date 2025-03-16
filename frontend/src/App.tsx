@@ -2,7 +2,7 @@ import './App.css'
 import useApiEndpoints from './hooks/useApiEndpoints'
 
 function App() {
-  const { boards, getBoards, addNewBoard } = useApiEndpoints();
+  const { boards, getBoards, addNewBoard, getPlayers } = useApiEndpoints();
 
   const onClickButton = () => {
     console.log("Clicked");
@@ -17,8 +17,10 @@ function App() {
         </button>
         <button onClick={addNewBoard}>Add New Board</button>
         <p>
-          {boards.map((b: string) => (
-            <li key={b}>{b}</li>
+          {boards.map((b) => (
+            <li key={b.ID}>
+              <button onClick={() => getPlayers(b.ID)}>{b.Name}</button>
+            </li>
           ))}
         </p>
       </div>

@@ -7,10 +7,11 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/google/uuid"
 )
+
+var manager = eb_logic.NewBoardManager()
 
 func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
@@ -20,8 +21,12 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "Hello, HTTP!\n")
 }
 
-func GetPlayers(w http.ResponseWriter, r *http.Request, boardID int) {
-	players := eb_logic.GetPlayers(boardID)
+func GetPlayers(w http.ResponseWriter, r *http.Request, boardID string) {
+	players, err := manager.GetPlayers(boardID)
+	if err != nil {
+		http.Error(w, "Failed to get players", http.StatusInternalServerError)
+		return
+	}
 	playerNames := make([]string, len(players))
 	for i, player := range players {
 		playerNames[i] = player.Name
@@ -32,20 +37,20 @@ func GetPlayers(w http.ResponseWriter, r *http.Request, boardID int) {
 }
 
 func AddBoard(w http.ResponseWriter, r *http.Request) {
-	randomID := uuid.New().String()
-	eb_logic.AddBoard(randomID, []eb_logic.Player{})
+	randomString := uuid.New().String()[:8]
+	manager.AddBoard(randomString, []eb_logic.Player{})
 	json.NewEncoder(w).Encode("OK")
 }
 
 func GetBoards(w http.ResponseWriter, r *http.Request) {
-	boards := eb_logic.GetBoards()
+	boards, _ := manager.GetBoards()
 	boardNames := make([]string, len(boards))
 	for i, board := range boards {
 		boardNames[i] = board.Name
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(boardNames)
+	json.NewEncoder(w).Encode(boards)
 }
 
 func main() {
@@ -61,13 +66,7 @@ func main() {
 			return
 		}
 
-		boardID, err := strconv.Atoi(boardIDStr)
-		if err != nil {
-			http.Error(w, "Invalid board parameter", http.StatusBadRequest)
-			return
-		}
-
-		GetPlayers(w, r, boardID)
+		GetPlayers(w, r, boardIDStr)
 	})
 	http.HandleFunc("/addBoard", func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
