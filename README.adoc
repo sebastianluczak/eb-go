@@ -1,0 +1,14 @@
+= EB-go
+
+My initial playground for Golang experiments.
+
+I'm hearing about Go all-around. It's time to see what it offers.
+
+- Backend: `/backend` written in Golang,
+- Frotnend: `/frontend` written in TS/React and Vite
+
+I really like this setup.
+
+Golang is like TS mixed with Rust. On the other hand, Rust feels like TS mixed with C++ for me.
+
+Really strange combination, I need to explore it further but time and space are bound to laws of physics. ;(
