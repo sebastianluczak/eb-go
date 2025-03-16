@@ -10,7 +10,6 @@ import (
 )
 
 func TestGetPlayers(t *testing.T) {
-	// Mock data
 	boardID := "test_board"
 	mockPlayers := []eb_logic.Player{
 		{Name: "Alice"},
