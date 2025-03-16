@@ -40,7 +40,18 @@ const useApiEndpoints = () => {
     }
   }
 
-  return { boards, getBoards, addNewBoard, getPlayers }
+  const addPlayer = async (boardId: string, playerName: string) => {
+    const result = await fetch("http://localhost:3333/addPlayer?board=" + boardId + '&player=' + playerName)
+    if (!result.ok) {
+      console.log("Whoopsie")
+    } else {
+      console.log("OK!");
+      const response = await result.json();
+      console.log(response);
+    }
+  }
+
+  return { boards, getBoards, addNewBoard, getPlayers, addPlayer }
 }
 
 export default useApiEndpoints

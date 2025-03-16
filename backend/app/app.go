@@ -73,6 +73,26 @@ func (s *Server) GetBoards(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(boards)
 }
 
+func (s *Server) AddPlayer(w http.ResponseWriter, r *http.Request) {
+	enableCors(w)
+
+	boardID := r.URL.Query().Get("board")
+	if boardID == "" {
+		http.Error(w, "Missing board parameter", http.StatusBadRequest)
+		return
+	}
+
+	playerName := r.URL.Query().Get("player")
+	if playerName == "" {
+		http.Error(w, "Missing player name parameter", http.StatusBadRequest)
+		return
+	}
+
+	s.manager.AddPlayer(boardID, playerName)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode("OK")
+}
+
 func main() {
 	eb_logic.HelloBoard()
 
@@ -84,6 +104,7 @@ func main() {
 	mux.HandleFunc("/getPlayers", server.GetPlayers)
 	mux.HandleFunc("/addBoard", server.AddBoard)
 	mux.HandleFunc("/getBoards", server.GetBoards)
+	mux.HandleFunc("/addPlayer", server.AddPlayer)
 
 	err := http.ListenAndServe(":3333", mux)
 	if err != nil {

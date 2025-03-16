@@ -89,3 +89,19 @@ func (bm *BoardManager) GetPlayers(id string) ([]Player, error) {
 	copy(playersCopy, board.Players)
 	return playersCopy, nil
 }
+
+func (bm *BoardManager) AddPlayer(id string, name string) {
+	if name == "" {
+		return
+	}
+
+	bm.mu.Lock()
+	defer bm.mu.Unlock()
+
+	board, exists := bm.boards[id]
+	if !exists {
+		return
+	}
+
+	board.Players = append(board.Players, Player{Name: name, Score: 0})
+}
