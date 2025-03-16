@@ -90,9 +90,9 @@ func (bm *BoardManager) GetPlayers(id string) ([]Player, error) {
 	return playersCopy, nil
 }
 
-func (bm *BoardManager) AddPlayer(id string, name string) {
+func (bm *BoardManager) AddPlayer(id string, name string) ([]Player, error) {
 	if name == "" {
-		return
+		return nil, errors.New("player name cannot be empty")
 	}
 
 	bm.mu.Lock()
@@ -100,8 +100,10 @@ func (bm *BoardManager) AddPlayer(id string, name string) {
 
 	board, exists := bm.boards[id]
 	if !exists {
-		return
+		return nil, errors.New("Board not found")
 	}
 
 	board.Players = append(board.Players, Player{Name: name, Score: 0})
+
+	return board.Players, nil
 }

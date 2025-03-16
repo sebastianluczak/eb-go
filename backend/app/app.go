@@ -88,9 +88,13 @@ func (s *Server) AddPlayer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.manager.AddPlayer(boardID, playerName)
+	player, err := s.manager.AddPlayer(boardID, playerName)
+	if err != nil {
+		http.Error(w, "Something wrong happened during creation of player", http.StatusBadRequest)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode("OK")
+	json.NewEncoder(w).Encode(player)
 }
 
 func main() {
